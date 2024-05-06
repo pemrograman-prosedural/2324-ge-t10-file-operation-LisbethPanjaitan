@@ -1,0 +1,8 @@
+bagaimana penggunaan file operation dengan baik
+jenis function apa yang digunakan pada file operation ini
+bagaimana penggunaan fgets dalam file operation
+penggunaan fopen dan fclose dalam file operation
+bagaimana menjalankan simulator jika dalam simulator tidak memiliki data
+apakah perlu menggunakan fungsi buffer
+Penggunaan buffer dan flush yang baik
+perbedaan *prt dan **prt
