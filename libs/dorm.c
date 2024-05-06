@@ -1,24 +1,17 @@
-#include "dorm.h"
 #include <stdio.h>
-#include <string.h>
+#include "dorm.h"
 
-struct dorm_t create_dorm(char *_name, unsigned short _capacity, enum gender_t _gender) {
-    struct dorm_t dorm_;
-    strcpy(dorm_.name, _name);
-    dorm_.capacity = _capacity;
-    dorm_.gender = _gender;
-    dorm_.residents_num = 0;
-    return dorm_;
+void dorm_print(const dorm_t *dorm) {
+    printf("%s|%hu|%s|%hu\n", dorm->name, dorm->capacity,
+           dorm->gender == MALE ? "male" : "female", dorm->residents_num);
 }
 
-void print_name_dorm(struct dorm_t *dorms, unsigned short int size_dorm) {
-    for (int i = 0; i < size_dorm; i++) {
-        printf("%s|%d|%s\n", dorms[i].name, dorms[i].capacity, gender_to_text(dorms[i].gender));
+void dorm_print_all(const dorm_t *dorms, unsigned short int size) {
+    for (int i = 0; i < size; i++) {
+        dorm_print(&dorms[i]);
     }
 }
 
-void print_all_dorm(struct dorm_t *dorms, unsigned short int size_dorm) {
-    for (int i = 0; i < size_dorm; i++) {
-        printf("%s|%d|%s|%d\n", dorms[i].name, dorms[i].capacity, gender_to_text(dorms[i].gender), dorms[i].residents_num);
-    }
+void dorm_print_all_detail(const dorm_t *dorms, unsigned short int size) {
+    dorm_print_all(dorms, size);
 }

@@ -1,69 +1,31 @@
-#include "student.h"
-#include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
+#include "student.h"
 
-struct student_t create_student(char *std_id, char *std_name, char *std_year, enum gender_t std_gender) {
-    struct student_t std;
-    strcpy(std.id, std_id);
-    strcpy(std.name, std_name);
-    strcpy(std.year, std_year);
-    std.gender = std_gender;
-    std.dorm = NULL;
-    return std;
+student_t create_student(const char *id, const char *name, const char *year, gender_t gender) {
+    student_t new_student;
+    strcpy(new_student.id, id);
+    strcpy(new_student.name, name);
+    strcpy(new_student.year, year);
+    new_student.gender = gender;
+    strcpy(new_student.dorm_name, "unassigned"); // Assuming initially unassigned
+    return new_student;
 }
 
-void student_print_detail(struct student_t *_student, unsigned short int _size) {
-    for (int i = 0; i < _size; i++) {
-        char dorm_name[15]; // Perhatikan bahwa kita perlu menggunakan array yang cukup besar untuk menyimpan nama asrama
-        if (_student[i].dorm == NULL) 
-            strcpy(dorm_name, "unassigned");
-        else
-            strcpy(dorm_name, _student[i].dorm->name);
+void student_print_detail(const student_t *student) {
+    printf("%s|%s|%s|%s|%s\n", student->id, student->name, student->year,
+           student->gender == MALE ? "male" : "female", student->dorm_name);
+}
 
-        printf("%s|%s|%s|%s|%s\n", _student[i].id, _student[i].name, _student[i].year, gender_to_text(_student[i].gender), dorm_name);
+void student_print_all(const student_t *students, unsigned short int size) {
+    for (int i = 0; i < size; ++i) {
+        printf("%s|%s|%s|%s\n", students[i].id, students[i].name, students[i].year,
+               students[i].gender == MALE ? "male" : "female");
     }
 }
 
-void student_print_all(struct student_t *_student, unsigned short int _size) {
-    for (int i = 0; i < _size; i++) {
-        printf("%s|%s|%s|%s\n", _student[i].id, _student[i].name, _student[i].year, gender_to_text(_student[i].gender));
+void student_print_all_detail(const student_t *students, unsigned short int size) {
+    for (int i = 0; i < size; ++i) {
+        student_print_detail(&students[i]);
     }
-}
-
-unsigned short int get_index_student(struct student_t *_student, unsigned short int size_std, char *_id) {
-    unsigned short int counter_std, i;
-
-    for (i = 0; i < size_std; i++) {
-        if (strcmp(_student[i].id, _id) == 0) {
-            counter_std = i;
-            break;
-        }
-    }
-    return counter_std;
-}
-
-unsigned short int get_index_dorm(struct dorm_t *_dorm, unsigned short int size_drm, char *_name) {
-    unsigned short int counter_drm, i;
-
-    for (i = 0; i < size_drm; i++) {
-        if (strcmp(_dorm[i].name, _name) == 0) {
-            counter_drm = i;
-            break;
-        }
-    }
-    return counter_drm;
-}
-
-void assign_student(struct student_t *_student, struct dorm_t *_dorm, unsigned short int idx_std, unsigned short int idx_drm) {       
-    if (_dorm[idx_drm].capacity > _dorm[idx_drm].residents_num) {
-        if (_dorm[idx_drm].gender == _student[idx_std].gender) {
-            _student[idx_std].dorm = &_dorm[idx_drm];
-            _dorm[idx_drm].residents_num++;
-        }
-    }
-}
-
-void move_student(struct student_t *_student, struct dorm_t *_dorm, struct dorm_t *old_dorm, char *id, char *dorm_name) {
-    // Implementasi logika untuk memindahkan mahasiswa ke asrama baru
 }

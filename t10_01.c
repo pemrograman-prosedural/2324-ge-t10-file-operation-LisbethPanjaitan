@@ -1,31 +1,23 @@
-// 12S23041 - Lisbeth Panjaitan
+// 12S23041 - Lisbeth Panjaitan 
 // 12S23021 - Eunike Purba
 
 #include <stdio.h>
-#include "libs/repository.h" // Pastikan direktori yang benar untuk repository.h
+#include "dorm.h"
+#include "student.h"
+#include "repository.h"
 
 int main() {
-    // Load initial data
-    FILE *dorm_file = fopen("./storage/dorm-repository.txt", "r");
-    FILE *student_file = fopen("./storage/student-repository.txt", "r");
+    dorm_t dorms[10]; // Assuming maximum 10 dorms
+    student_t students[100]; // Assuming maximum 100 students
 
-    struct dorm_t dorms[MAX_DORMS];
-    struct student_t students[MAX_STUDENTS];
-    unsigned short int size_dorm = 0, size_student = 0, prt_dorm = 0, prt_student = 0;
+    // Load initial data from files
+    load_initial_data(dorms, students);
 
-    int num_gender = 0; // Inisialisasi variabel num_gender
-
-    parse_file_drm(dorm_file, dorms, &size_dorm, &prt_dorm, num_gender);
-    parse_file_std(student_file, students, &size_student, &prt_student, num_gender);
-
-    fclose(dorm_file);
-    fclose(student_file);
-
-    // Print initial data
-    printf("Initial Dorm Data:\n");
-    print_all_dorm(dorms, size_dorm);
-    printf("\nInitial Student Data:\n");
-    student_print_detail(students, size_student);
+    // Print all dorms and students
+    printf("dorm-print-all-detail\n");
+    dorm_print_all_detail(dorms, 10);
+    student_print_all_detail(students, 100);
+    printf("---\n");
 
     return 0;
 }

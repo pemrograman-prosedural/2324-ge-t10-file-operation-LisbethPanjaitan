@@ -4,4 +4,4 @@ bagaimana penggunaan fgets dalam file operation
 penggunaan fopen dan fclose dalam file operation
 bagaimana menjalankan simulator jika dalam simulator tidak memiliki data
 apakah perlu menggunakan fungsi buffer
-Penggunaan buffer dan flush yang baik
+Penggunaan buffer dan flush yang baik 
