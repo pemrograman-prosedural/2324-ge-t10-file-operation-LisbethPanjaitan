@@ -1,52 +1,50 @@
-#include <stdio.h>
 #include "repository.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-void load_initial_data(dorm_t *dorms, student_t *students) {
-    FILE *dorm_file = fopen("./storage/dorm-repository.txt", "r");
-    if (dorm_file == NULL) {
-        printf("Error opening dorm-repository.txt\n");
-        return;
+void parse_file_std(FILE *std, struct student_t *mhs, unsigned short int *size_mhs, unsigned short int *prt_mhs) {
+    char buff_std[60];
+    buff_std[0] = '\0';
+
+    while (fgets(buff_std, sizeof(buff_std), std)) {
+        struct data_file data_std; // Mendefinisikan struktur di sini
+        strcpy(data_std.file_id, strtok(buff_std, "|"));
+        strcpy(data_std.file_name, strtok(NULL, "|"));
+        strcpy(data_std.file_year, strtok(NULL, "|"));
+        strcpy(data_std.file_gender, strtok(NULL, "\n")); // Changed separator from "|" to "\n"
+
+        enum gender_t num_gender = gender_to_value(data_std.file_gender);
+
+        mhs[*prt_mhs] = create_student(data_std.file_id, data_std.file_name, data_std.file_year, num_gender);
+
+        (*size_mhs)++;
+        (*prt_mhs)++;
     }
 
-    int num_dorms = 0;
-    while (fscanf(dorm_file, "%[^|]|%hu|%hu\n", dorms[num_dorms].name, &dorms[num_dorms].capacity, &dorms[num_dorms].residents_num) == 3) {
-        dorms[num_dorms].gender = MALE; // Assuming all dorms are for males initially
-        num_dorms++;
-    }
-    fclose(dorm_file);
-
-    FILE *student_file = fopen("./storage/student-repository.txt", "r");
-    if (student_file == NULL) {
-        printf("Error opening student-repository.txt\n");
-        return;
-    }
-
-    int num_students = 0;
-    while (fscanf(student_file, "%[^#]#%[^#]#%[^#]#%[^\n]\n", students[num_students].id, students[num_students].name, students[num_students].year, students[num_students].dorm) == 4) {
-        // Assuming all students are initially unassigned
-        students[num_students].gender = MALE; // Assuming all students are males initially
-        num_students++;
-    }
-    fclose(student_file);
+    fflush(std);
+    fclose(std);
 }
 
-void save_data(const dorm_t *dorms, const student_t *students, int num_dorms, int num_students) {
-    FILE *dorm_file = fopen("./storage/dorm-repository.txt", "w");
-    if (dorm_file == NULL) {
-        printf("Error opening dorm-repository.txt for writing\n");
-        return;
-    }
+void parse_file_drm(FILE *fdrm, struct dorm_t *dorms, unsigned short int *size_drm, unsigned short int *prt_drm) {
+    char buff_drm[60];
+    buff_drm[0] = '\0';
 
-    for (int i = 0; i < num_dorms; i++) {
-        fprintf(dorm_file, "%s|%hu|%hu\n", dorms[i].name, dorms[i].capacity, dorms[i].residents_num);
-    }
-    fclose(dorm_file);
+    while (fgets(buff_drm, sizeof(buff_drm), fdrm)) {
+        struct data_file data_drm; // Mendefinisikan struktur di sini
+        strcpy(data_drm.file_id, strtok(buff_drm, "|"));
+        unsigned short int capacity;
+        strcpy(data_drm.file_year, strtok(NULL, "|"));
+        capacity = atoi(data_drm.file_year);
 
-    FILE *student_file = fopen("./storage/student-repository.txt", "w");
-    if (student_file == NULL) {
-        printf("Error opening student-repository.txt for writing\n");
-        return;
-    }
+        strcpy(data_drm.file_gender, strtok(NULL, "\n")); // Changed separator from "|" to "\n"
 
-    for (int i = 0; i < num_students; i++) {
-        fprintf(student_file, "%s#%s#%s#%s\n", students
+        enum gender_t num_gender = gender_to_value(data_drm.file_gender);
+
+        dorms[*prt_drm] = create_dorm(data_drm.file_id, capacity, num_gender);
+        (*size_drm)++;
+        (*prt_drm)++;
+    }
+    fflush(fdrm);
+    fclose(fdrm);
+}

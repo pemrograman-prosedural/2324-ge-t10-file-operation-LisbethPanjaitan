@@ -1,15 +1,19 @@
-#ifndef DORM_H
+#ifndef DORM_H 
 #define DORM_H
 
-typedef struct {
+#include "gender.h"
+
+#define MAX_DORMS 100
+
+struct dorm_t {
     char name[50];
-    unsigned short capacity;
-    enum { MALE, FEMALE } gender;
-    unsigned short residents_num;
-} dorm_t;
+    int capacity;
+    enum gender_t gender;
+    int residents_num;
+};
 
-void dorm_print(const dorm_t *dorm);
-void dorm_print_all(const dorm_t *dorms, unsigned short int size);
-void dorm_print_all_detail(const dorm_t *dorms, unsigned short int size);
+struct dorm_t create_dorm(char *_name, unsigned short _capacity, enum gender_t _gender);
+void print_all_dorm(struct dorm_t *dorms, unsigned short int size_dorm);
+void print_name_dorm(struct dorm_t *dorms, unsigned short int size_dorm);
 
-#endif /* DORM_H */
+#endif

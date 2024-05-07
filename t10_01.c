@@ -2,22 +2,28 @@
 // 12S23021 - Eunike Purba
 
 #include <stdio.h>
-#include "dorm.h"
-#include "student.h"
-#include "repository.h"
+#include "libs/repository.h" // Pastikan direktori yang benar untuk repository.h
 
 int main() {
-    dorm_t dorms[10]; // Assuming maximum 10 dorms
-    student_t students[100]; // Assuming maximum 100 students
+    // Load initial data
+    FILE *dorm_file = fopen("./storage/dorm-repository.txt", "r");
+    FILE *student_file = fopen("./storage/student-repository.txt", "r");
 
-    // Load initial data from files
-    load_initial_data(dorms, students);
+    struct dorm_t dorms[MAX_DORMS];
+    struct student_t students[MAX_STUDENTS];
+    unsigned short int size_dorm = 0, size_student = 0, prt_dorm = 0, prt_student = 0;
 
-    // Print all dorms and students
-    printf("dorm-print-all-detail\n");
-    dorm_print_all_detail(dorms, 10);
-    student_print_all_detail(students, 100);
-    printf("---\n");
+    parse_file_drm(dorm_file, dorms, &size_dorm, &prt_dorm);
+    parse_file_std(student_file, students, &size_student, &prt_student);
+
+    fclose(dorm_file);
+    fclose(student_file);
+
+    // Print initial data
+    printf("Initial Dorm Data:\n");
+    print_all_dorm(dorms, size_dorm);
+    printf("\nInitial Student Data:\n");
+    student_print_detail(students, size_student);
 
     return 0;
 }

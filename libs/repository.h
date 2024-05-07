@@ -3,8 +3,17 @@
 
 #include "dorm.h"
 #include "student.h"
+#include <stdio.h>
 
-void load_initial_data(dorm_t *dorms, student_t *students);
-void save_data(const dorm_t *dorms, const student_t *students, int num_dorms, int num_students);
+// Definisikan struct data_file di sini
+struct data_file {
+    char file_id[12];
+    char file_name[40];
+    char file_year[5];
+    char file_gender[10];
+};
 
-#endif /* REPOSITORY_H */
+void parse_file_std(FILE *std, struct student_t *mhs, unsigned short int *size_mhs, unsigned short int *prt_mhs);
+void parse_file_drm(FILE *fdrm, struct dorm_t *dorms, unsigned short int *size_drm, unsigned short int *prt_drm);
+
+#endif
